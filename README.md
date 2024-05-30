@@ -32,17 +32,23 @@ dynamically loading content from different workspaces
 
 ## Remarks
 
+
+In case of Dashboard integration there can be an issue with react markdown (but it does not apply on pure insight integration)
 ```js
-// not working in React 16
-//import { Dashboard } from "@gooddata/sdk-ui-dashboard";
-// solve in package json: override/resolution
+ERROR in ./node_modules/@gooddata/sdk-ui-dashboard/node_modules/react-markdown/lib/index.js 88:0-53
+Module not found: Error: Can't resolve 'react/jsx-runtime' in '/Users/martinmilicka/repositories/3rdparty/gooddata-react-16/node_modules/@gooddata/sdk-ui-dashboard/node_modules/react-markdown/lib'
+Did you mean 'jsx-runtime.js'?
+BREAKING CHANGE: The request 'react/jsx-runtime' failed to resolve only because it was resolved as fully specified
+(probably because the origin is strict EcmaScript Module, e. g. a module with javascript mimetype, a '*.mjs' file, or a '*.js' file where the package.json contains '"type": "module"').
+The extension in the request is mandatory for it to be fully specified.
+Add the extension to the request.
+```
+which can be fixed within `webpack.config.js`
 
-// alternative
-// import { BackendProvider, InsightView, idRef, WorkspaceProvider } from "@gooddata/sdk-ui-all";
-
-,
-  "overrides": {
-    "react-markdown": "^9.0.1"
+```
+resolve: {
+  alias: {
+      "react/jsx-runtime": path.join(__dirname, "node_modules/react/jsx-runtime"),
   }
-
+}
 ```
